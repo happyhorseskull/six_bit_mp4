@@ -90,7 +90,7 @@ def dict_prep():
 def string_prep(total_loops):
 
 	# multiplies by 8 to get total bits, divide by 6 for hexbits and then +1 for ceil
-	hexbit_len = int( ((total_loops * 8) / 6) + 1)
+	hexbit_len = int( ((total_loops * jump_gap * 8) / 6) + 1)
 
 	# read in lines from pipe. buffer limited to length of hexbit_len for safety from buffer overflow bugs
 	s = ""
