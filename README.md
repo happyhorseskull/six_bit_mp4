@@ -34,22 +34,28 @@ converts a string of text into an mp4 with audio
 #
 ##### which characters does it accept?
    - [0-9], [A-Z], [a-z], [_], [.]
-   - '0' = '000000', '.' = '111111'
+   
+   '0' = '000000'
+   
+   ...
+   
+   '.' = '111111'
 
 #
 ##### the image on my media player doesn't change but the audio works:
-   yeah this happened to me with VLC. I think the 2 fps rate is unusual and scrambles the media player's brain.
+   Yeah this happened to me with VLC. I think the 2 fps rate is unusual and scrambles the media player's brain.
 
 #
 ##### what if I want a different frame-per-second rate?
-   it's possible but you'll have to figure out how to make the audio accept the increased or decreased video byte rate
+   It's possible but you'll have to figure out how to make the audio accept the increased or decreased video byte rate. To increase try changing the mp4's pix_fmt to rgb8 and changing fps from 2 to 6.
 
 #
 ##### will it work on Windows?
-   Probably but you'll have to install ffmpeg which is free and available here: http://www.ffmpeg.org/download.html#build-windows
+   Probably. You'll have to install ffmpeg which is free and available here: http://www.ffmpeg.org/download.html#build-windows
    
    Then alter the subprocess.call command:
      - change ffmpeg to [ffmpeg directory]\ffmpeg.exe
+     
      - delete ', shell=True' from the end of the subprocess.call command
 
 #
@@ -60,7 +66,7 @@ converts a string of text into an mp4 with audio
 
 #
 ##### why is this Python 3 only?
-   it uses int.to_bytes which isn't available in Python 2. Sorry!
+   It uses int.to_bytes which isn't available in Python 2. Sorry!
    
 #   
 #####If you have questions or whatever I'm on twitter as @happyhorseskull
