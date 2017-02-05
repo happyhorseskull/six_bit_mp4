@@ -59,4 +59,4 @@ converts a string of text into an mp4 with audio
    it uses int.to_bytes which isn't available in Python 2. Sorry!
    
 #   
-#####If you have questions or whatever I'm on twitter as happyhorseskull
+#####If you have questions or whatever I'm on twitter as @happyhorseskull
