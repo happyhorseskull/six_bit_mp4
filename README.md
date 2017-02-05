@@ -38,7 +38,7 @@ converts a string of text into an mp4 with audio
 
 #
 ##### what if I want a different frame-per-second rate?
-   it's possible but you'll have to figure out how make the audio accept the increased or decreased video information rate
+   it's possible but you'll have to figure out how to make the audio accept the increased or decreased video byte rate
 
 #
 ##### will it work on Windows?
