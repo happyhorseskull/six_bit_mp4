@@ -5,6 +5,10 @@ converts a string of text into an mp4 with audio
 ### FAQ
 
 #
+##### what do I need to run this?
+    Python 3 and ffmpeg
+
+#
 ##### how to use it:
    `$ echo "Pick a lane and drive like hell." | python3 six_bit_mp4.py`
    
