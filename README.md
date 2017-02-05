@@ -16,9 +16,7 @@ converts a string of text into an mp4 with audio
 
 #
 ##### what it does:
-   Takes a string from the command line and converts it to video and audio.
-   The video is a series of varying patterns but the audio tends towards headache inducing frequencies.
-	 There's a 1000Hz low pass filter but if you want high tones that your dog will hate you can comment it out.
+   Takes a string from the command line and converts it to video and audio. The video is a series of varying patterns but the audio tends towards headache inducing frequencies. There's a 1000Hz low pass filter in the ffmpeg command to avoid those. If you want high tones that your dog will hate then comment it out.
 
 #
 ##### how:
