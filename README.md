@@ -16,11 +16,12 @@ converts a string of text into an mp4 with audio
 
 #
 ##### what it does:
-   Takes a string from the command line and converts it to video and audio. The video is a series of varying patterns but the audio tends towards headache inducing frequencies. There's a 1000Hz low pass filter in the ffmpeg command to avoid those. If you want high tones that your dog will hate then comment it out.
+   Takes a string from the command line then converts it to video and audio. The video is a series of varying patterns but the audio tends towards headache inducing frequencies. There's a 1000Hz low pass filter in the ffmpeg command to avoid those. If you want high tones that your dog will hate then comment it out.
 
 #
 ##### how:
    -converts characters from strings into 6 bits: 'a' to '100100' and squishes them together
+
    -then it puts the big bunch of bits together repeatedly until there's enough to make a 360x360 jpg
    
    the first iteration will contain only the first letter of the string: PPPPPPPPP..
