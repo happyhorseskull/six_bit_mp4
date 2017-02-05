@@ -27,7 +27,7 @@ converts a string of text into an mp4 with audio
    
    the first iteration will contain only the first letter of the string: PPPPPPPPP..
    
-   the second iteration: PiPiPiPiPi...
+   the second iteration: PiPiPiPiPi..
    
    and so on until all the characters are exhausted
 
