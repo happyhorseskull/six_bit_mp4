@@ -6,11 +6,11 @@ converts a string of text into an mp4 with audio
 
 #
 ##### what do I need to run this?
-    Python 3 and ffmpeg
+   Python 3 and ffmpeg
 
 #
 ##### how to use it:
-   `$ echo "Pick a lane and drive like hell." | python3 six_bit_mp4.py`
+    $ echo "Pick a lane and drive like hell." | python3 six_bit_mp4.py
    
    A file called hexbit.mp4 should appear in the directory when it's done.
 
