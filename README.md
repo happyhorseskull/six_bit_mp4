@@ -28,7 +28,7 @@ converts a string of text into an mp4 with audio
    
    the second iteration: PiPiPiPiPi..
    
-   and so on until all the characters are exhausted
+   and so on until all the characters from the string are exhausted
 
 #
 ##### which characters does it accept?
