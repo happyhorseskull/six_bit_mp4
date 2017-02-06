@@ -16,7 +16,7 @@ import subprocess
 # what it does:
 #   takes a string from the command line and converts it to video and audio
 #   the video is a series of varying patterns but the audio tends towards headache inducing frequencies
-#	there's a 1000Hz low pass filter but if you want high tones that your dog will hate you can comment it out
+#	so I put the audio through some effects and hard limited it at 1000Hz
 
 # how:
 #   converts characters from strings into 6 bits: 'a' to '100100' and squishes them together
@@ -97,16 +97,19 @@ def string_prep(total_loops):
 	for line in sys.stdin.readline(hexbit_len):
 		s += line
 
+	# everything that isn't alphanumeric becomes '_'
+	s = re.sub('[^0-9a-zA-Z._]+', '_', s)
+
+	# removes a trailing character that was converted to an underscore
+	s = s[:-1]
+
+
 	if len(s) < 1:
 		print("Error: string must be at least 1 character long.")
 		sys.exit()
 
-	# everything that isn't alphanumeric becomes '_'
-	s = re.sub('[^0-9a-zA-Z.]+', '_', s)
-
-	# get rid of this loop and change to return(s) if you want to vary the length of videos
+	# get rid of this loop and change return(ns) to return(s) if you want to vary the length of videos
 	# according to the length of input text
-
 	ns = ''
 	while len(ns) < hexbit_len:
 		ns += s
@@ -140,15 +143,29 @@ def bitstring_to_bytes(s):
 def make_video(raw_file):
 
 	# uses the bytes to create both video and audio and combines them into an mp4
-	subprocess.call('ffmpeg -loglevel error -y ' +
-					' -f rawvideo -pix_fmt rgb24 -r 2 -s 360x360 -i ' + raw_file +
+
+	subprocess.call('ffmpeg -v error -y ' +
 					# because audio usually requires less information than video
-					# these bit sizes are abnormally high to use all bytes in the raw_file
-					' -f f64be -acodec pcm_s64be -ac 2 -ar 48600 -i ' + raw_file +
-					# has a tendency to create annoying frequencies so we lowpass filter them out
-					' -af "lowpass=f=1000" ' +
+					# bit sizes are abnormally high to use all bytes in the raw_file
+					' -f f64be -acodec pcm_s64be -ac 1 -ar 97200 -i ' + raw_file +
+					' -af aresample=resampler=soxr -ac 1 -ar 16000 temp.wav', shell=True)
+
+	subprocess.call('ffmpeg -v error -y -i temp.wav ' +
+					# there's a super annoying high tone in every frame around ~20,000 Hz
+					# and this gets rid of it because there aren't enough samples for frequencies that high
+					' -af asetrate=16000*1/8,atempo=2/1,atempo=2/1,atempo=2/1,' +
+					'aphaser=type=t:decay=.4,' +
+					'vibrato=f=5:d=1.0,' +
+					'chorus=1:1:20:1:1:5,' +
+					'aecho=\'1:1:500|1000:1|1\',' +
+					# filters out annoying high tones and super-low awkward rumble bass
+					'lowpass=f=1000,highpass=f=40 ' +
+					' out.wav', shell=True)
+
+	subprocess.call('ffmpeg -v error -y ' +
+					' -f rawvideo -pix_fmt rgb24 -r 2 -s 360x360 -i ' + raw_file +
 					# settings for twitter. if it rejects a video try dropping -b:v to 256k
-					' -vcodec libx264 -acodec aac -ar 44100 -b:a 64k -b:v 512k -pix_fmt yuv420p ' +
+					' -i out.wav -vcodec libx264 -acodec aac -ar 16000 -ac 1 -b:v 512k -pix_fmt yuv420p -shortest ' +
 					out_mp4, shell=True)
 
 
@@ -168,15 +185,19 @@ six_dict = dict_prep()
 s = string_prep(total_loops)
 i = itt = jump_gap
 old_s = ''
+old_bb = ''
 while i <= total_loops * itt:
 
 	new_s = s[:i]
-	# checks if the previous frame was identical, quits if it is
-	if old_s == new_s: break
-	old_s = new_s
 
 	# repeats the string until it's long enough for a full frame
 	big_bit = build_raw_string(new_s)
+	# checks if the previous frame was identical, quits if it is
+	# when a single character is entered there isn't any variation from frame to frame
+	# which is boring. this spits out a single boring frame instead of bunches
+	# or failing to return anything
+	if old_bb == big_bit: break
+	old_bb = big_bit
 	# '10001000' to b'\x88'
 	big_byte = bitstring_to_bytes(big_bit)
 
@@ -191,4 +212,7 @@ make_video(raw_file)
 
 # clean up
 shutil.rmtree(images_dir)
+os.remove('temp.wav')
+os.remove('out.wav')
 os.remove(raw_file)
+
